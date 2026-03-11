@@ -5,7 +5,7 @@ using SwiftPay.Domain.Remittance.Entities;
 
 namespace SwiftPay.Config.Configuration
 {
-    public class AmendmentConfiguration :
+    public class AmendmentModelConfiguration :
         IEntityTypeConfiguration<Amendment>,
         IEntityTypeConfiguration<Cancellation>,
         IEntityTypeConfiguration<RefundRef>

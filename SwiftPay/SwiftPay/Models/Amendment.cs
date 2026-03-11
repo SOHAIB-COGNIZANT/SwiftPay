@@ -21,5 +21,7 @@ namespace SwiftPay.Domain.Remittance.Entities
 
         // Navigation (Optional for Phase-1)
         //public RemittanceRequest RemittanceRequest { get; set; }
+
+        //File changed
     }
 }
