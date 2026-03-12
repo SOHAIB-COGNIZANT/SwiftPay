@@ -1,4 +1,5 @@
 ﻿using System;
+using SwiftPay.Constants.Enums;
 
 namespace SwiftPay.Domain.Remittance.Entities
 {
@@ -10,13 +11,13 @@ namespace SwiftPay.Domain.Remittance.Entities
         public string RemitId { get; set; }
 
         // Check Type: Sanctions, PEP, AML, Geo
-        public string CheckType { get; set; }
+        public ComplianceCheckType CheckType { get; set; }
 
         // Result: Clear, Flag, Hold
-        public string Result { get; set; }
+        public ComplianceResult Result { get; set; }
 
         // Severity: Low, Medium, High
-        public string Severity { get; set; }
+        public ComplianceSeverity Severity { get; set; }
 
         public DateTimeOffset CheckedDate { get; set; }
 
