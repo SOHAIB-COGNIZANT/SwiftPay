@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SwiftPay.Constants.Enums;
+using System;
 
 namespace SwiftPay.Domain.Remittance.Entities
 {
@@ -7,7 +8,7 @@ namespace SwiftPay.Domain.Remittance.Entities
         public string DecisionId { get; set; }
         public string RemitId { get; set; }
         public string AnalystId { get; set; }
-        public string Decision { get; set; } // Approve, Hold, Reject
+        public ComplianceDecisionStatus Decision { get; set; } // Approve, Hold, Reject
         public string Notes { get; set; }
         public DateTimeOffset DecisionDate { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
