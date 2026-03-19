@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SwiftPay.Configuration;
 
@@ -11,9 +12,11 @@ using SwiftPay.Configuration;
 namespace SwiftPay.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260319054139_initdb")]
+    partial class initdb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -704,9 +707,7 @@ namespace SwiftPay.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("ReportID");
 
@@ -917,7 +918,7 @@ namespace SwiftPay.Migrations
 
                     b.HasKey("QuoteID");
 
-                    b.ToTable("FXQuotes");
+                    b.ToTable("FXQuote");
                 });
 
             modelBuilder.Entity("SwiftPay.FXModule.Api.Models.FeeRule", b =>
@@ -978,7 +979,7 @@ namespace SwiftPay.Migrations
 
                     b.HasKey("FeeRuleID");
 
-                    b.ToTable("FeeRules");
+                    b.ToTable("FeeRule");
                 });
 
             modelBuilder.Entity("SwiftPay.FXModule.Api.Models.RateLock", b =>
@@ -1028,7 +1029,7 @@ namespace SwiftPay.Migrations
 
                     b.HasKey("LockID");
 
-                    b.ToTable("RateLocks");
+                    b.ToTable("RateLock");
                 });
 
             modelBuilder.Entity("SwiftPay.Models.Document", b =>
