@@ -38,7 +38,6 @@ namespace SwiftPay.Services
             {
                 // Use BCrypt Enhanced hashing on a background thread to avoid blocking
                 entity.PasswordHash = await Task.Run(() => BCrypt.Net.BCrypt.EnhancedHashPassword(dto.Password));
-                entity.Password = null; // clear plain password
             }
 
             var created = await _repo.CreateAsync(entity);

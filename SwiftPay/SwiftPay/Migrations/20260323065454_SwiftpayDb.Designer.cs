@@ -12,8 +12,8 @@ using SwiftPay.Configuration;
 namespace SwiftPay.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260320132203_SwiftPay")]
-    partial class SwiftPay
+    [Migration("20260323065454_SwiftpayDb")]
+    partial class SwiftpayDb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -707,7 +707,9 @@ namespace SwiftPay.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETUTCDATE()");
 
                     b.HasKey("ReportID");
 
@@ -918,7 +920,7 @@ namespace SwiftPay.Migrations
 
                     b.HasKey("QuoteID");
 
-                    b.ToTable("FXQuote");
+                    b.ToTable("FXQuotes");
                 });
 
             modelBuilder.Entity("SwiftPay.FXModule.Api.Models.FeeRule", b =>
@@ -979,7 +981,7 @@ namespace SwiftPay.Migrations
 
                     b.HasKey("FeeRuleID");
 
-                    b.ToTable("FeeRule");
+                    b.ToTable("FeeRules");
                 });
 
             modelBuilder.Entity("SwiftPay.FXModule.Api.Models.RateLock", b =>
@@ -1029,7 +1031,7 @@ namespace SwiftPay.Migrations
 
                     b.HasKey("LockID");
 
-                    b.ToTable("RateLock");
+                    b.ToTable("RateLocks");
                 });
 
             modelBuilder.Entity("SwiftPay.Models.Document", b =>
@@ -1311,13 +1313,10 @@ namespace SwiftPay.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -1448,7 +1447,7 @@ namespace SwiftPay.Migrations
             modelBuilder.Entity("SwiftPay.Models.Document", b =>
                 {
                     b.HasOne("SwiftPay.Domain.Remittance.Entities.RemittanceRequest", "RemittanceRequest")
-                        .WithMany()
+                        .WithMany("Documents")
                         .HasForeignKey("RemitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1459,7 +1458,7 @@ namespace SwiftPay.Migrations
             modelBuilder.Entity("SwiftPay.Models.RemitValidation", b =>
                 {
                     b.HasOne("SwiftPay.Domain.Remittance.Entities.RemittanceRequest", "RemittanceRequest")
-                        .WithMany()
+                        .WithMany("Validations")
                         .HasForeignKey("RemitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1484,6 +1483,13 @@ namespace SwiftPay.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SwiftPay.Domain.Remittance.Entities.RemittanceRequest", b =>
+                {
+                    b.Navigation("Documents");
+
+                    b.Navigation("Validations");
                 });
 
             modelBuilder.Entity("SwiftPay.Models.Role", b =>

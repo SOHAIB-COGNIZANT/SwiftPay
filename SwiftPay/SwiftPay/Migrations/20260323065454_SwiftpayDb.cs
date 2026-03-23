@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SwiftPay.Migrations
 {
     /// <inheritdoc />
-    public partial class SwiftPay : Migration
+    public partial class SwiftpayDb : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -93,7 +93,7 @@ namespace SwiftPay.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FeeRule",
+                name: "FeeRules",
                 columns: table => new
                 {
                     FeeRuleID = table.Column<string>(type: "nvarchar(450)", nullable: false, defaultValueSql: "NEWID()"),
@@ -112,11 +112,11 @@ namespace SwiftPay.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FeeRule", x => x.FeeRuleID);
+                    table.PrimaryKey("PK_FeeRules", x => x.FeeRuleID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "FXQuote",
+                name: "FXQuotes",
                 columns: table => new
                 {
                     QuoteID = table.Column<string>(type: "nvarchar(450)", nullable: false, defaultValueSql: "NEWID()"),
@@ -134,7 +134,7 @@ namespace SwiftPay.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FXQuote", x => x.QuoteID);
+                    table.PrimaryKey("PK_FXQuotes", x => x.QuoteID);
                 });
 
             migrationBuilder.CreateTable(
@@ -159,7 +159,7 @@ namespace SwiftPay.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RateLock",
+                name: "RateLocks",
                 columns: table => new
                 {
                     LockID = table.Column<string>(type: "nvarchar(450)", nullable: false, defaultValueSql: "NEWID()"),
@@ -174,7 +174,7 @@ namespace SwiftPay.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RateLock", x => x.LockID);
+                    table.PrimaryKey("PK_RateLocks", x => x.LockID);
                 });
 
             migrationBuilder.CreateTable(
@@ -229,7 +229,7 @@ namespace SwiftPay.Migrations
                     Metrics = table.Column<string>(type: "text", nullable: false),
                     GeneratedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETUTCDATE()"),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "GETUTCDATE()"),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
                 },
                 constraints: table =>
@@ -331,8 +331,7 @@ namespace SwiftPay.Migrations
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
                     Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false, defaultValue: "Active"),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "CURRENT_TIMESTAMP"),
@@ -658,10 +657,10 @@ namespace SwiftPay.Migrations
                 name: "ComplianceDecisions");
 
             migrationBuilder.DropTable(
-                name: "FeeRule");
+                name: "FeeRules");
 
             migrationBuilder.DropTable(
-                name: "FXQuote");
+                name: "FXQuotes");
 
             migrationBuilder.DropTable(
                 name: "KYCRecords");
@@ -673,7 +672,7 @@ namespace SwiftPay.Migrations
                 name: "PayoutInstructions");
 
             migrationBuilder.DropTable(
-                name: "RateLock");
+                name: "RateLocks");
 
             migrationBuilder.DropTable(
                 name: "ReconciliationRecord");

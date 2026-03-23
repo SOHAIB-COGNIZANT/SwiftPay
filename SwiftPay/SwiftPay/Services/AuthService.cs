@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
-using SwiftPay.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using SwiftPay.DTOs.UserCustomerDTO;
 using SwiftPay.Models;
@@ -46,7 +45,16 @@ namespace SwiftPay.Services
                 var created = await _userRepo.CreateAsync(user);
 
                 var customerRole = await _roleRepo.GetByRoleTypeAsync(Constants.Enums.RoleType.Customer);
-                if (customerRole == null) throw new InvalidOperationException("RetailCustomer role is missing from database.");
+                if (customerRole == null)
+                {
+                    // Defensive: create the default Customer role if it does not exist to avoid blocking public registration.
+                    customerRole = await _roleRepo.CreateAsync(new Role
+                    {
+                        RoleType = Constants.Enums.RoleType.Customer,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    });
+                }
 
                 var ur = new UserRole { UserId = created.UserId, RoleId = customerRole.RoleId, IsActive = true, CreatedAt = DateTime.UtcNow };
                 await _userRoleRepo.CreateAsync(ur);
@@ -88,14 +96,8 @@ namespace SwiftPay.Services
 
             var token = GenerateJwtToken(user, roles);
 
-            // If hash needs rehash (work factor increased), rehash and update stored hash
-            var desiredWorkFactor = 12;
-            var needsRehash = await Task.Run(() => BCrypt.Net.BCrypt.PasswordNeedsRehash(hash, desiredWorkFactor));
-            if (needsRehash)
-            {
-                user.PasswordHash = await Task.Run(() => BCrypt.Net.BCrypt.EnhancedHashPassword(dto.Password));
-                await _userRepo.UpdateAsync(user);
-            }
+            // Note: we intentionally do not perform automatic rehashing here.
+            // Verification is done only against the stored hash to avoid unnecessary writes.
 
             var authDto = _mapper.Map<AuthResponseDto>(user);
             return new LoginResponseDto { Token = token, User = authDto };

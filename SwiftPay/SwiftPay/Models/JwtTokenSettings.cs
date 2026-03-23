@@ -1,4 +1,4 @@
-namespace SwiftPay.Configuration
+namespace SwiftPay.Models
 {
     public class JwtTokenSettings
     {

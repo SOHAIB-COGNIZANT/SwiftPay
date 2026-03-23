@@ -7,8 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using SwiftPay.Configuration;
-using SwiftPay.Profiles;
 using SwiftPay.Utilities;
+using SwiftPay.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 

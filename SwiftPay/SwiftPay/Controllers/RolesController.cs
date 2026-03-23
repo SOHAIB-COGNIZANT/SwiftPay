@@ -165,6 +165,29 @@ namespace SwiftPay.Controllers
         }
 
         /// <summary>
+        /// Remove an assigned role from a user (soft-delete)
+        /// Admin only
+        /// </summary>
+        [HttpDelete("users/{userId}/roles/{userRoleId}")]
+        [Authorize(Roles = "Admin")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> RemoveRoleFromUser(int userId, int userRoleId)
+        {
+            try
+            {
+                var success = await _userRoleService.RemoveRoleFromUserAsync(userRoleId);
+                if (!success) return NotFound(new { message = $"UserRole with ID {userRoleId} not found or already removed." });
+                return Ok(new { message = "Role removed from user successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while removing the role.", error = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Admin-only: create a staff user and assign a role in one request
         /// </summary>
         [HttpPost("staff")]

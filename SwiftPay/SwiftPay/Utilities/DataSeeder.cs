@@ -30,12 +30,15 @@ public static class DataSeeder
                 existingRoles = (await roleRepo.GetAllAsync()).ToList();
             }
 
-        // 2. Strict Configuration Check (Production Ready)
-        var seedEmail = config["SeedAdmin:Email"] 
-            ?? throw new InvalidOperationException("SeedAdmin:Email is missing from appsettings.json");
+        // 2. Optional Seed Admin creation (safe: do not throw if missing)
+        var seedEmail = config["SeedAdmin:Email"];
+        var seedPassword = config["SeedAdmin:Password"];
 
-        var seedPassword = config["SeedAdmin:Password"] 
-            ?? throw new InvalidOperationException("SeedAdmin:Password is missing from appsettings.json");
+        if (string.IsNullOrWhiteSpace(seedEmail) || string.IsNullOrWhiteSpace(seedPassword))
+        {
+            Console.WriteLine("[SEED] SeedAdmin credentials not provided; skipping creation of admin user.");
+            return;
+        }
 
         // 3. Create Master Admin User
         var user = await userRepo.GetByEmailAsync(seedEmail);

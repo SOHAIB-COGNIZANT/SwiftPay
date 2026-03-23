@@ -211,7 +211,9 @@ namespace SwiftPay.Mapper
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
                 // Status uses database default - don't set from mapper
                 .ForMember(dest => dest.Status, opt => opt.Ignore())
-                .ForMember(dest => dest.UserRoles, opt => opt.Ignore());
+                .ForMember(dest => dest.UserRoles, opt => opt.Ignore())
+                // Do not map PasswordHash from DTOs automatically - service must set it explicitly
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
 
             // Map RegisterUserDto -> User (for auth registration)
             CreateMap<RegisterUserDto, User>()
@@ -220,12 +222,13 @@ namespace SwiftPay.Mapper
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.IsDeleted, opt => opt.Ignore())
                 .ForMember(dest => dest.Status, opt => opt.Ignore())
-                .ForMember(dest => dest.UserRoles, opt => opt.Ignore());
+                .ForMember(dest => dest.UserRoles, opt => opt.Ignore())
+                // Ensure AutoMapper does not set PasswordHash from DTOs
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore());
 
             // Map UpdateUserDto -> User (partial update)
             CreateMap<UpdateUserDto, User>()
                 .ForMember(dest => dest.UserId, opt => opt.Ignore())
-                .ForMember(dest => dest.Password, opt => opt.Ignore())
                 .ForMember(dest => dest.Status, opt => opt.Ignore())
                 .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
                 .ForMember(dest => dest.UpdatedAt, opt => opt.Ignore())
